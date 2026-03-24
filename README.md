@@ -18,9 +18,6 @@ Supports private endpoint integration for secure connectivity.
 
 Utilization of terratest for robust validation.
 
-> **Note:** This module uses the azapi provider because `azurerm_ai_foundry` creates `Microsoft.MachineLearningServices/workspaces` (the legacy ML workspace model), while the new Foundry model uses `Microsoft.CognitiveServices/accounts` with `allowProjectManagement = true`. Only the CognitiveServices-based model supports connections and capability hosts. Tracking issue: [hashicorp/terraform-provider-azurerm#31820](https://github.com/hashicorp/terraform-provider-azurerm/issues/31820).
-
-> **Known issue:** The Azure CognitiveServices API does not support parallel modifications to resources under the same project. Destroying multiple project connections simultaneously may fail with an etag conflict (409). Re-running the destroy resolves this.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -221,6 +218,11 @@ Using a dedicated module, we've developed a naming convention for resources that
 Full examples detailing all usages, along with integrations with dependency modules, are located in the examples directory.
 
 To update the module's documentation run `make doc`
+
+This module uses the azapi provider because `azurerm_ai_foundry` creates `Microsoft.MachineLearningServices/workspaces` (the legacy ML workspace model), while the new Foundry model uses `Microsoft.CognitiveServices/accounts` with
+`allowProjectManagement = true`. Only the CognitiveServices-based model supports connections and capability hosts. Tracking issue: [hashicorp/terraform-provider-azurerm#31820](https://github.com/hashicorp/terraform-provider-azurerm/issues/31820).
+
+The Azure CognitiveServices API does not support parallel modifications to resources under the same project. Destroying multiple project connections simultaneously may fail with an etag conflict (409). Re-running the destroy resolves this.
 
 ## Contributors
 
