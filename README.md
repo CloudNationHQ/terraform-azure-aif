@@ -219,7 +219,7 @@ Full examples detailing all usages, along with integrations with dependency modu
 
 To update the module's documentation run `make doc`
 
-This module uses the azapi provider because `azurerm_ai_foundry` creates `Microsoft.MachineLearningServices/workspaces` (the legacy ML workspace model), while the new Foundry model uses `Microsoft.CognitiveServices/accounts` with
+This module uses the azapi provider because `azurerm_ai_foundry` creates `Microsoft.MachineLearningServices/workspaces`, while the new Foundry model uses `Microsoft.CognitiveServices/accounts` with
 `allowProjectManagement = true`.
 
 Only the CognitiveServices-based model supports connections and capability hosts. Tracking issue: [hashicorp/terraform-provider-azurerm#31820](https://github.com/hashicorp/terraform-provider-azurerm/issues/31820).
