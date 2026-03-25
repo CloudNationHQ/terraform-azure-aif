@@ -69,7 +69,7 @@ object({
     location                         = optional(string)
     tags                             = optional(map(string))
     kind                             = optional(string, "AIServices")
-    custom_subdomain_name            = string
+    custom_subdomain_name            = optional(string)
     allow_project_management         = optional(bool, true)
     sku_name                         = optional(string, "S0")
     disable_local_auth               = optional(bool, false)
@@ -149,14 +149,6 @@ Description: default azure region to be used.
 Type: `string`
 
 Default: `null`
-
-### <a name="input_naming"></a> [naming](#input\_naming)
-
-Description: contains naming convention
-
-Type: `map(string)`
-
-Default: `{}`
 
 ### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
 

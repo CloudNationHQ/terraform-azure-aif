@@ -5,7 +5,7 @@ variable "config" {
     location                         = optional(string)
     tags                             = optional(map(string))
     kind                             = optional(string, "AIServices")
-    custom_subdomain_name            = string
+    custom_subdomain_name            = optional(string)
     allow_project_management         = optional(bool, true)
     sku_name                         = optional(string, "S0")
     disable_local_auth               = optional(bool, false)
@@ -82,12 +82,6 @@ variable "config" {
     condition     = var.config.resource_group_name != null || var.resource_group_name != null
     error_message = "resource group name must be provided either in the config object or as a separate variable."
   }
-}
-
-variable "naming" {
-  description = "contains naming convention"
-  type        = map(string)
-  default     = {}
 }
 
 variable "location" {

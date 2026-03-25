@@ -25,8 +25,8 @@ module "foundry" {
   resource_group_name = module.rg.groups.demo.name
 
   config = {
-    name                  = module.naming.cognitive_account.name_unique
-    custom_subdomain_name = module.naming.cognitive_account.name_unique
+    name                  = module.naming.ai_foundry.name_unique
+    custom_subdomain_name = module.naming.ai_foundry.name_unique
 
     projects = {
       ml-project = {
