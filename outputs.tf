@@ -3,6 +3,21 @@ output "account" {
   value       = azapi_resource.this
 }
 
+output "deployments" {
+  description = "contains all exported attributes of the deployments"
+  value       = azapi_resource.deployment
+}
+
+output "policies" {
+  description = "contains all exported attributes of the rai policies"
+  value       = azapi_resource.policy
+}
+
+output "policy_deployments" {
+  description = "contains all exported attributes of the policy-linked deployments"
+  value       = azapi_resource.policy_deployment
+}
+
 output "projects" {
   description = "contains all exported attributes of the ai foundry projects"
   value       = azapi_resource.project

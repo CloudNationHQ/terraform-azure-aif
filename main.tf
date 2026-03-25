@@ -53,6 +53,104 @@ resource "azurerm_role_assignment" "this" {
   skip_service_principal_aad_check       = var.config.role_assignment.skip_service_principal_aad_check
 }
 
+resource "azapi_resource" "deployment" {
+  for_each = lookup(var.config, "deployments", {})
+
+  name      = coalesce(each.value.name, each.key)
+  parent_id = azapi_resource.this.id
+
+  body = {
+    sku = {
+      name     = each.value.sku.name
+      capacity = each.value.sku.capacity
+    }
+    properties = {
+      model = {
+        format  = each.value.model.format
+        name    = each.value.model.name
+        version = each.value.model.version
+      }
+      versionUpgradeOption = each.value.version_upgrade_option
+    }
+  }
+
+  type                      = "Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview"
+  schema_validation_enabled = false
+
+  retry = {
+    error_message_regex = ["RequestConflict"]
+  }
+}
+
+resource "azapi_resource" "policy" {
+  for_each = lookup(var.config, "policies", {})
+
+  name      = coalesce(each.value.name, each.key)
+  parent_id = azapi_resource.this.id
+
+  body = {
+    properties = {
+      basePolicyName = each.value.base_policy_name
+      mode           = each.value.mode
+      contentFilters = [
+        for k, v in each.value.content_filters : {
+          name              = v.name
+          enabled           = v.filter_enabled
+          blocking          = v.block_enabled
+          severityThreshold = v.severity_threshold
+          source            = v.source
+        }
+      ]
+    }
+  }
+
+  type                      = "Microsoft.CognitiveServices/accounts/raiPolicies@2025-04-01-preview"
+  schema_validation_enabled = false
+
+  retry = {
+    error_message_regex = ["RequestConflict"]
+  }
+
+  depends_on = [azapi_resource.deployment]
+}
+
+resource "azapi_resource" "policy_deployment" {
+  for_each = merge([
+    for pk, p in lookup(var.config, "policies", {}) : {
+      for dk, d in lookup(p, "deployments", {}) :
+      "${pk}.${dk}" => merge(d, { policy_key = pk })
+    }
+  ]...)
+
+  name      = coalesce(each.value.name, element(split(".", each.key), 1))
+  parent_id = azapi_resource.this.id
+
+  body = {
+    sku = {
+      name     = each.value.sku.name
+      capacity = each.value.sku.capacity
+    }
+    properties = {
+      model = {
+        format  = each.value.model.format
+        name    = each.value.model.name
+        version = each.value.model.version
+      }
+      raiPolicyName        = coalesce(azapi_resource.policy[each.value.policy_key].name)
+      versionUpgradeOption = each.value.version_upgrade_option
+    }
+  }
+
+  type                      = "Microsoft.CognitiveServices/accounts/deployments@2025-04-01-preview"
+  schema_validation_enabled = false
+
+  retry = {
+    error_message_regex = ["RequestConflict"]
+  }
+
+  depends_on = [azapi_resource.policy]
+}
+
 resource "azapi_resource" "project" {
   for_each = lookup(
     var.config, "projects", {}
