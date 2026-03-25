@@ -109,7 +109,10 @@ module "foundry" {
             category = "CognitiveSearch"
             target   = "https://${module.search.search_service.name}.search.windows.net"
             role_assignments = {
-              definitions = ["Search Index Data Contributor", "Search Service Contributor"]
+              definitions = [
+                "Search Index Data Contributor",
+                "Search Service Contributor"
+              ]
             }
             metadata = {
               ApiType    = "Azure"
