@@ -42,6 +42,44 @@ variable "config" {
       thread_storage_connections = optional(list(string), [])
       vector_store_connections   = optional(list(string), [])
     }))
+    deployments = optional(map(object({
+      name                   = optional(string)
+      version_upgrade_option = optional(string, "OnceNewDefaultVersionAvailable")
+      model = object({
+        format  = string
+        name    = string
+        version = optional(string)
+      })
+      sku = object({
+        name     = string
+        capacity = optional(number)
+      })
+    })), {})
+    policies = optional(map(object({
+      name             = optional(string)
+      base_policy_name = string
+      mode             = optional(string)
+      content_filters = optional(map(object({
+        name               = string
+        filter_enabled     = bool
+        block_enabled      = bool
+        severity_threshold = string
+        source             = string
+      })), {})
+      deployments = optional(map(object({
+        name                   = optional(string)
+        version_upgrade_option = optional(string, "OnceNewDefaultVersionAvailable")
+        model = object({
+          format  = string
+          name    = string
+          version = optional(string)
+        })
+        sku = object({
+          name     = string
+          capacity = optional(number)
+        })
+      })), {})
+    })), {})
     projects = optional(map(object({
       name         = optional(string)
       display_name = optional(string)

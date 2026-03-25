@@ -34,9 +34,9 @@ The following requirements are needed by this module:
 
 The following providers are used by this module:
 
-- <a name="provider_azapi"></a> [azapi](#provider\_azapi) (~> 2.0)
+- <a name="provider_azapi"></a> [azapi](#provider\_azapi) (2.9.0)
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (~> 4.0)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (4.65.0)
 
 ## Resources
 
@@ -44,6 +44,9 @@ The following resources are used by this module:
 
 - [azapi_resource.capability_host](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.connection](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.deployment](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.policy](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
+- [azapi_resource.policy_deployment](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.project](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.project_capability_host](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
 - [azapi_resource.project_connection](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) (resource)
@@ -106,6 +109,44 @@ object({
       thread_storage_connections = optional(list(string), [])
       vector_store_connections   = optional(list(string), [])
     }))
+    deployments = optional(map(object({
+      name                   = optional(string)
+      version_upgrade_option = optional(string, "OnceNewDefaultVersionAvailable")
+      model = object({
+        format  = string
+        name    = string
+        version = optional(string)
+      })
+      sku = object({
+        name     = string
+        capacity = optional(number)
+      })
+    })), {})
+    policies = optional(map(object({
+      name             = optional(string)
+      base_policy_name = string
+      mode             = optional(string)
+      content_filters = optional(map(object({
+        name               = string
+        filter_enabled     = bool
+        block_enabled      = bool
+        severity_threshold = string
+        source             = string
+      })), {})
+      deployments = optional(map(object({
+        name                   = optional(string)
+        version_upgrade_option = optional(string, "OnceNewDefaultVersionAvailable")
+        model = object({
+          format  = string
+          name    = string
+          version = optional(string)
+        })
+        sku = object({
+          name     = string
+          capacity = optional(number)
+        })
+      })), {})
+    })), {})
     projects = optional(map(object({
       name         = optional(string)
       display_name = optional(string)
@@ -181,6 +222,18 @@ Description: contains all exported attributes of the account capability host
 ### <a name="output_connections"></a> [connections](#output\_connections)
 
 Description: contains all exported attributes of the account connections
+
+### <a name="output_deployments"></a> [deployments](#output\_deployments)
+
+Description: contains all exported attributes of the deployments
+
+### <a name="output_policies"></a> [policies](#output\_policies)
+
+Description: contains all exported attributes of the rai policies
+
+### <a name="output_policy_deployments"></a> [policy\_deployments](#output\_policy\_deployments)
+
+Description: contains all exported attributes of the policy-linked deployments
 
 ### <a name="output_project_capability_hosts"></a> [project\_capability\_hosts](#output\_project\_capability\_hosts)
 
