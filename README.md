@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Supersed by https://github.com/CloudNationHQ/terraform-azure-cog
+
 # AI Foundry
 
 This terraform module simplifies the creation and management of azure ai foundry resources, providing customizable options for accounts, projects, connections, and capability hosts, all managed through code.
