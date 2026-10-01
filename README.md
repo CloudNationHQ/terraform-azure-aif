@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> Supersed by https://github.com/CloudNationHQ/terraform-azure-cog
+> Superseded by https://github.com/CloudNationHQ/terraform-azure-cog
 
 # AI Foundry
 
